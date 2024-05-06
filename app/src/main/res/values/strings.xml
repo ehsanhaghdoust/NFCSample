@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NFCSample</string>
+    <string name="read_nfc_btn_txt">Read NFC</string>
+    <string name="write_nfc_btn_txt">Write NFC</string>
 </resources>
