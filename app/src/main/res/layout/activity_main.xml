@@ -14,7 +14,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:text="@string/read_nfc_btn_txt"
-        app:layout_constraintBottom_toTopOf="@+id/writeNfcBtn"
+        app:layout_constraintBottom_toTopOf="@+id/sendMessageBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,12 +24,20 @@
         android:id="@+id/writeNfcBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:text="@string/write_nfc_btn_txt"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/sendMessageBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/sendMessageBtn"
+        app:layout_constraintTop_toBottomOf="@+id/sendMessageBtn" />
+
+    <Button
+        android:id="@+id/sendMessageBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/send_message"
+        app:layout_constraintBottom_toTopOf="@+id/writeNfcBtn"
+        app:layout_constraintEnd_toEndOf="@+id/readNfcBtn"
+        app:layout_constraintStart_toStartOf="@+id/readNfcBtn"
         app:layout_constraintTop_toBottomOf="@+id/readNfcBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

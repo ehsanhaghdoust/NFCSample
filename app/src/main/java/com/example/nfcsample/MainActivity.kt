@@ -38,6 +38,10 @@ class MainActivity : BaseActivity() {
             startActivity(intent)
         }
 
+//        binding.sendNfcBtn.setOnClickListener {
+//
+//        }
+
         binding.readNfcBtn.setOnClickListener {
             val intent = Intent(this, NfcReaderActivity::class.java)
             startActivity(intent)
