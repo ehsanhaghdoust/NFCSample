@@ -1,13 +1,13 @@
-package com.example.nfcsample
+package com.example.nfcsample.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.nfcsample.R
 import com.example.nfcsample.databinding.ActivityMainBinding
+import com.example.nfcsample.view.nfcReader.NfcReaderActivity
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding

@@ -1,4 +1,4 @@
-package com.example.nfcsample
+package com.example.nfcsample.view
 
 import androidx.appcompat.app.AppCompatActivity
 

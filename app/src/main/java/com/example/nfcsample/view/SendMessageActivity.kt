@@ -1,4 +1,4 @@
-package com.example.nfcsample
+package com.example.nfcsample.view
 
 class SendMessageActivity: BaseActivity() {
     override fun initViews() {

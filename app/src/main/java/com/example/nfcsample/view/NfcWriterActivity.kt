@@ -1,4 +1,4 @@
-package com.example.nfcsample
+package com.example.nfcsample.view
 
 import android.content.Intent
 import android.os.Bundle
