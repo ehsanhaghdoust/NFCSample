@@ -2,20 +2,16 @@ package com.example.nfcsample.view.nfcWriter
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.content.IntentFilter
-import android.nfc.NdefMessage
-import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.nfc.Tag
-import android.nfc.tech.Ndef
+import android.nfc.tech.NfcA
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.nfcsample.databinding.ActivityNfcWriterBinding
-import java.util.Locale
 
-class NfcWriterActivity: AppCompatActivity() {
+class NfcWriterActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityNfcWriterBinding
     val viewModel: NfcWriterViewModel by viewModels()
@@ -28,6 +24,7 @@ class NfcWriterActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        checkNfcSupport()
 
     }
 
@@ -46,21 +43,28 @@ class NfcWriterActivity: AppCompatActivity() {
         handleNfcIntent(intent)
     }
 
+    private fun checkNfcSupport() {
+        if (nfcAdapter == null) {
+            // Device doesn't support NFC
+            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        nfcAdapter?.let {
+            if (it.isEnabled.not()) {
+                // NFC is disabled
+                Toast.makeText(this, "Please enable NFC in your device settings.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     private fun enableForegroundDispatch() {
         val intent = Intent(this, javaClass).apply {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-        val filters = arrayOf(IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED).apply {
-            addCategory(Intent.CATEGORY_DEFAULT)
-            try {
-                addDataScheme("text/plain") // Add data MIME type for text
-            } catch (e: IntentFilter.MalformedMimeTypeException) {
-                e.printStackTrace()
-            }
-        })
-        nfcAdapter?.enableForegroundDispatch(this, pendingIntent, filters, null)
+        val techList = arrayOf(arrayOf(NfcA::class.java.name)) // Filter for Mifare Classic
+        nfcAdapter?.enableForegroundDispatch(this, pendingIntent, null, techList)
     }
 
     private fun disableForegroundDispatch() {
@@ -70,52 +74,19 @@ class NfcWriterActivity: AppCompatActivity() {
     private fun handleNfcIntent(intent: Intent?) {
         if (intent?.action == NfcAdapter.ACTION_TAG_DISCOVERED) {
             val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG) ?: return
-            writeTextToNfcTag(tag)
+            checkMifareClassicTag(tag)
         }
     }
 
-    private fun writeTextToNfcTag(tag: Tag) {
-        val text = "Ehsan Haghdoust" // Replace with your desired text
-
-        val ndefRecord = createTextRecord(text)
-        val ndefMessage = NdefMessage(arrayOf(ndefRecord))
-
-        // Check if tag is writable
-//        if (!tag.isWritable) {
-//            Toast.makeText(this, "This tag is not writable.", Toast.LENGTH_SHORT).show()
-//            return
-//        }
-
-        // Perform NDEF write operation
-
-//        with(NfcTag.from(tag)) {
-        with(Ndef.get(tag)) {
-            try {
-                connect()
-                writeNdefMessage(ndefMessage)
-                Toast.makeText(this@NfcWriterActivity, "Text written to NFC tag!", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                Toast.makeText(this@NfcWriterActivity, "Failed to write to NFC tag!", Toast.LENGTH_SHORT).show()
-                e.printStackTrace()
-            } finally {
-                close()
-            }
+    private fun checkMifareClassicTag(tag: Tag) {
+//        if (tag.techList.contains(NfcA::class.java)) {
+        if (tag.techList.contains("android.nfc.tech.NfcA")) {
+            // Mifare Classic tag detected
+            Toast.makeText(this, "Mifare Classic tag detected!", Toast.LENGTH_SHORT).show()
+            // You can't directly write text using NDEF to Mifare Classic.
+            // Further processing (like reading specific sectors) might require lower-level Mifare Classic communication libraries.
+        } else {
+            Toast.makeText(this, "Tag is not a Mifare Classic tag.", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun createTextRecord(message: String): NdefRecord {
-        val langCode = Locale.ENGLISH.language
-        val textBytes = message.toByteArray(Charsets.UTF_8)
-        val langBytes = langCode.toByteArray(Charsets.UTF_8)
-        val langLength = langBytes.size
-        val textLength = textBytes.size
-
-        val payload = ByteArray(1 + langLength + textLength)
-//        val aa = 0x1F
-        payload[0] = (langLength and 0x1F).toByte() // Text encoding
-        payload[1] = langCode.toByte() // Language code
-        System.arraycopy(textBytes, 0, payload, 2, textLength)
-
-        return NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, ByteArray(0), payload)
     }
 }
