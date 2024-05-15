@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.nfcsample.R
 import com.example.nfcsample.databinding.ActivityMainBinding
 import com.example.nfcsample.view.nfcReader.NfcReaderActivity
+import com.example.nfcsample.view.nfcWriter.NfcWriterActivity
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding

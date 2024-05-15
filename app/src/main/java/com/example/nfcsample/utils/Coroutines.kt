@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 public object Coroutines {
+
     //region UI contexts
     fun main(work : suspend (() -> Unit)) =
         CoroutineScope(Dispatchers.Main.immediate).launch {
@@ -25,25 +26,8 @@ public object Coroutines {
                 work(this)
             }
         }
-    fun main(fragment : BottomSheetDialogFragment, work : suspend ((scope : CoroutineScope) -> Unit)) =
-        fragment.lifecycleScope.launch {
-            fragment.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                work(this)
-            }
-        }
-    fun main(fragment : DialogFragment, work : suspend ((scope : CoroutineScope) -> Unit)) =
-        fragment.lifecycleScope.launch {
-            fragment.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                work(this)
-            }
-        }
-    fun main(fragment : Fragment, work : suspend ((scope : CoroutineScope) -> Unit)) =
-        fragment.lifecycleScope.launch {
-            fragment.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                work(this)
-            }
-        }
     //endregion
+
     //region I/O operations
     fun io(work : suspend (() -> Unit)) =
         CoroutineScope(Dispatchers.IO).launch {
@@ -56,6 +40,7 @@ public object Coroutines {
         }
     }
     //endregion
+
     //region Uses heavy CPU computation
     fun default(work : suspend (() -> Unit)) =
         CoroutineScope(Dispatchers.Default).launch {
@@ -67,6 +52,7 @@ public object Coroutines {
             work()
         }
     //endregion
+
     //region No need to run on specific context
     fun unconfined(work : suspend (() -> Unit)) =
         CoroutineScope(Dispatchers.Unconfined).launch {

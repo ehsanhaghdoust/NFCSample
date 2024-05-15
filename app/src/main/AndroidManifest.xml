@@ -33,7 +33,7 @@
 <!--                <data android:mimeType="text/plain" />-->
 <!--            </intent-filter>-->
         </activity>
-        <activity android:name="com.example.nfcsample.view.NfcWriterActivity">
+        <activity android:name="com.example.nfcsample.view.nfcWriter.NfcWriterActivity">
 
         </activity>
     </application>

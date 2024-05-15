@@ -27,7 +27,7 @@ public class NfcReaderViewModel(application: Application) : AndroidViewModel(app
 
     companion object {
         private val TAG = NfcReaderViewModel::class.java.getSimpleName()
-        private const val prefix = "android.nfc.tech."
+        private const val PREFIX = "android.nfc.tech."
     }
 
     private val liveNFC: MutableStateFlow<NFCStatus?>
@@ -96,7 +96,7 @@ public class NfcReaderViewModel(application: Application) : AndroidViewModel(app
             stringBuilder.append("Tag ID (reversed): ${getReversed(id)} \n")
             stringBuilder.append("Technologies: ")
             tag.techList.forEach { tech ->
-                stringBuilder.append(tech.substring(prefix.length))
+                stringBuilder.append(tech.substring(PREFIX.length))
                 stringBuilder.append(", ")
             }
             stringBuilder.delete(stringBuilder.length - 2, stringBuilder.length)
